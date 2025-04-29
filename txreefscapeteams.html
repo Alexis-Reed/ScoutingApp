@@ -44,6 +44,14 @@
     .team-item:last-child {
       border-bottom: none;
     }
+    .team-link {
+      color: #007BFF;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .team-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -74,25 +82,17 @@
     teams.forEach(team => {
       const li = document.createElement("li");
       li.className = "team-item";
-      li.textContent = `${team.number}: ${team.name}`;
+      
+      // Create a link for each team
+      const teamLink = document.createElement("a");
+      teamLink.className = "team-link";
+      teamLink.href = `team-detail.html?team=${team.number}`; // Link to the team details page with the team number
+      teamLink.textContent = `${team.number}: ${team.name}`;
+      
+      li.appendChild(teamLink);
       teamList.appendChild(li);
     });
 
     // Filter functionality for the search bar
     document.getElementById("search-bar").addEventListener("input", function () {
-      const query = this.value.toLowerCase();
-      const items = document.querySelectorAll(".team-item");
-
-      items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        if (text.includes(query)) {
-          item.style.display = "";
-        } else {
-          item.style.display = "none";
-        }
-      });
-    });
-  </script>
-</body>
-</html>
-
+      const query = this.value
