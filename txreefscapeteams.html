@@ -1,1 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Texas District Robot Teams</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background-color: #007BFF;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      z-index: 1;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin: 10px auto;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      display: block;
+    }
+    .team-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 80vh;
+      overflow-y: auto;
+      background-color: white;
+    }
+    .team-item {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .team-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Texas District Robot Teams</h1>
+    <input type="text" id="search-bar" placeholder="Search by team number or name" />
+  </header>
+  <ul class="team-list" id="team-list">
+    <!-- Team items will be dynamically populated -->
+  </ul>
+
+  <script>
+    // List of Texas District teams (team number followed by team name)
+    const teams = [
+      { number: 9999, name: "Example Team Z" },
+      { number: 7500, name: "Alpha Robotics" },
+      { number: 5432, name: "Beta Bots" },
+      { number: 3456, name: "Gamma Gears" },
+      { number: 1234, name: "Delta Droidz" },
+      { number: 10, name: "Omega Operators" }
+    ];
+
+    // Sort teams in reverse order by number
+    teams.sort((a, b) => b.number - a.number);
+
+    // Populate the team list dynamically
+    const teamList = document.getElementById("team-list");
+    teams.forEach(team => {
+      const li = document.createElement("li");
+      li.className = "team-item";
+      li.textContent = `${team.number}: ${team.name}`;
+      teamList.appendChild(li);
+    });
+
+    // Filter functionality for the search bar
+    document.getElementById("search-bar").addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      const items = document.querySelectorAll(".team-item");
+
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(query)) {
+          item.style.display = "";
+        } else {
+          item.style.display = "none";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
 
