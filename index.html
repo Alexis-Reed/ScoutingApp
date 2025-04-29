@@ -7,8 +7,20 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+    }
+    .hidden {
+      display: none;
+    }
+    #password-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
     }
     .button {
       display: inline-block;
@@ -28,8 +40,33 @@
   </style>
 </head>
 <body>
-  <h1>457 Grease Monkeys Scouting</h1>
-  <a href="events.html" class="button">Events</a>
-  <a href="teams.html" class="button">Teams</a>
+  <div id="password-screen">
+    <h1>Enter Password Here</h1>
+    <input type="password" id="password-input" placeholder="Enter password" />
+    <button id="submit-password" class="button">Submit</button>
+  </div>
+
+  <div id="main-content" class="hidden">
+    <h1>457 Grease Monkeys Scouting</h1>
+    <a href="events.html" class="button">Events</a>
+    <a href="teams.html" class="button">Teams</a>
+  </div>
+
+  <script>
+    const passwordScreen = document.getElementById('password-screen');
+    const mainContent = document.getElementById('main-content');
+    const passwordInput = document.getElementById('password-input');
+    const submitButton = document.getElementById('submit-password');
+
+    submitButton.addEventListener('click', () => {
+      const password = passwordInput.value;
+      if (password === '457') {
+        passwordScreen.style.display = 'none';
+        mainContent.classList.remove('hidden');
+      } else {
+        alert('Incorrect password, try again!');
+      }
+    });
+  </script>
 </body>
 </html>
