@@ -69,9 +69,17 @@
     const passwordInput = document.getElementById('password-input');
     const submitButton = document.getElementById('submit-password');
 
+    // Check session storage for authentication status
+    if (sessionStorage.getItem('authenticated') === 'true') {
+      passwordScreen.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+    }
+
+    // Handle password submission
     submitButton.addEventListener('click', () => {
       const password = passwordInput.value;
       if (password === '457') {
+        sessionStorage.setItem('authenticated', 'true'); // Store authentication status
         passwordScreen.classList.add('hidden');
         mainContent.classList.remove('hidden');
       } else {
@@ -79,8 +87,12 @@
         passwordInput.value = ''; // Clear the input field for security
       }
     });
+
+    // Clear session storage on page unload (back/refresh)
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.clear();
+    });
   </script>
 </body>
 </html>
-
 
