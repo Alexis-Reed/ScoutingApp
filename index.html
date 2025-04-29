@@ -71,7 +71,7 @@
 
     // Check session storage for authentication status
     if (sessionStorage.getItem('authenticated') === 'true') {
-      passwordScreen.classList.add('hidden');
+      passwordScreen.remove(); // Completely remove the password screen
       mainContent.classList.remove('hidden');
     }
 
@@ -80,7 +80,7 @@
       const password = passwordInput.value;
       if (password === '457') {
         sessionStorage.setItem('authenticated', 'true'); // Store authentication status
-        passwordScreen.classList.add('hidden');
+        passwordScreen.remove(); // Completely remove the password screen
         mainContent.classList.remove('hidden');
       } else {
         alert('Incorrect password, try again!');
