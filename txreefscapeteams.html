@@ -1,165 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Texas District Robot Teams</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f9fa;
-      color: #212529;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      background-color: #007BFF;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      z-index: 1;
-    }
-    input[type="text"], input[type="number"] {
-      width: 80%;
-      padding: 10px;
-      margin: 10px auto;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      display: block;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    .team-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      max-height: 80vh;
-      overflow-y: auto;
-      background-color: white;
-    }
-    .team-item {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-    }
-    .team-item:last-child {
-      border-bottom: none;
-    }
-    .team-link {
-      color: #007BFF;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .team-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TX Reefscape Teams</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-container {
+            display: flex;
+            width: 60%;
+        }
+        #searchBar {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+        }
+        #searchButton {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        #newTeamBtn {
+            padding: 10px 15px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        .team-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .team-btn {
+            padding: 10px 15px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            min-width: 120px;
+        }
+        .team-btn:hover {
+            background-color: #e68a00;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 5px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #submitTeam {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Texas District Robot Teams</h1>
-    <input type="text" id="search-bar" placeholder="Search by team number or name" />
-  </header>
+    <div class="header">
+        <button id="newTeamBtn">New Team</button>
+        <div class="search-container">
+            <input type="text" id="searchBar" placeholder="Search teams...">
+            <button id="searchButton">Search</button>
+        </div>
+    </div>
 
-  <!-- Form to add teams -->
-  <div style="text-align: center; padding: 20px;">
-    <input type="number" id="team-number" placeholder="Enter team number" />
-    <input type="text" id="team-name" placeholder="Enter team name" />
-    <button id="add-team">Add Team</button>
-  </div>
+    <div class="team-buttons" id="teamButtons">
+        <!-- Team buttons will be generated here -->
+    </div>
 
-  <ul class="team-list" id="team-list">
-    <!-- Team items will be dynamically populated -->
-  </ul>
+    <!-- New Team Modal -->
+    <div id="newTeamModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Team</h2>
+            <div class="form-group">
+                <label for="teamNumber">Team Number:</label>
+                <input type="text" id="teamNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="teamName">Team Name:</label>
+                <input type="text" id="teamName" required>
+            </div>
+            <button id="submitTeam">Add Team</button>
+        </div>
+    </div>
 
-  <script>
-    // List of Texas District teams (team number followed by team name)
-    const teams = [
-      { number: 9999, name: "Example Team Z" },
-      { number: 7500, name: "Alpha Robotics" },
-      { number: 5432, name: "Beta Bots" },
-      { number: 3456, name: "Gamma Gears" },
-      { number: 1234, name: "Delta Droidz" },
-      { number: 10, name: "Omega Operators" }
-    ];
+    <script>
+        // Sample data - in a real app, this might come from a database
+        const teams = [
+            { number: "101", name: "Ocean Guardians" },
+            { number: "205", name: "Reef Rangers" },
+            { number: "307", name: "Coral Defenders" },
+            { number: "412", name: "Marine Protectors" },
+            { number: "519", name: "Aqua Warriors" }
+        ];
 
-    // Sort teams in reverse order by number
-    teams.sort((a, b) => b.number - a.number);
+        // Display teams on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            displayTeams(teams);
+        });
 
-    // Populate the team list dynamically
-    const teamList = document.getElementById("team-list");
-    const addTeamButton = document.getElementById("add-team");
-
-    function populateTeamList() {
-      teamList.innerHTML = ''; // Clear existing list
-      teams.forEach(team => {
-        const li = document.createElement("li");
-        li.className = "team-item";
-
-        // Create a link for each team
-        const teamLink = document.createElement("a");
-        teamLink.className = "team-link";
-        teamLink.href = `team-${team.number}.html`; // Link to the team details page with the team number
-        teamLink.textContent = `${team.number}: ${team.name}`;
-
-        li.appendChild(teamLink);
-        teamList.appendChild(li);
-      });
-    }
-
-    // Initial population of the list
-    populateTeamList();
-
-    // Filter functionality for the search bar
-    document.getElementById("search-bar").addEventListener("input", function () {
-      const query = this.value.toLowerCase();
-      const items = document.querySelectorAll(".team-item");
-
-      items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        if (text.includes(query)) {
-          item.style.display = "";
-        } else {
-          item.style.display = "none";
+        // Display teams in numerical order
+        function displayTeams(teamsToDisplay) {
+            const container = document.getElementById('teamButtons');
+            container.innerHTML = '';
+            
+            // Sort teams by number
+            const sortedTeams = [...teamsToDisplay].sort((a, b) => parseInt(a.number) - parseInt(b.number));
+            
+            sortedTeams.forEach(team => {
+                const btn = document.createElement('button');
+                btn.className = 'team-btn';
+                btn.textContent = `${team.number} ${team.name}`;
+                btn.onclick = function() {
+                    // Create and navigate to team page
+                    const teamPage = `${team.number}${team.name.replace(/\s+/g, '')}.html`;
+                    window.location.href = teamPage;
+                };
+                container.appendChild(btn);
+            });
         }
-      });
-    });
 
-    // Add team to the list
-    addTeamButton.addEventListener("click", () => {
-      const teamNumber = document.getElementById("team-number").value;
-      const teamName = document.getElementById("team-name").value;
+        // Search functionality
+        document.getElementById('searchButton').addEventListener('click', searchTeams);
+        document.getElementById('searchBar').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                searchTeams();
+            }
+        });
 
-      if (teamNumber && teamName) {
-        const newTeam = {
-          number: parseInt(teamNumber),
-          name: teamName
-        };
+        function searchTeams() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            if (searchTerm === '') {
+                displayTeams(teams);
+                return;
+            }
+            
+            const filteredTeams = teams.filter(team => 
+                team.number.toLowerCase().includes(searchTerm) || 
+                team.name.toLowerCase().includes(searchTerm)
+            );
+            
+            displayTeams(filteredTeams);
+        }
 
-        // Add the new team to the list and re-populate
-        teams.push(newTeam);
+        // New Team Modal functionality
+        const modal = document.getElementById('newTeamModal');
+        const newTeamBtn = document.getElementById('newTeamBtn');
+        const closeBtn = document.getElementsByClassName('close')[0];
+        const submitTeamBtn = document.getElementById('submitTeam');
 
-        // Sort the teams again and update the list
-        teams.sort((a, b) => b.number - a.number);
-        populateTeamList();
+        newTeamBtn.onclick = function() {
+            modal.style.display = 'block';
+        }
 
-        // Clear the input fields
-        document.getElementById("team-number").value = '';
-        document.getElementById("team-name").value = '';
-      } else {
-        alert("Please enter both team number and team name.");
-      }
-    });
-  </script>
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        submitTeamBtn.onclick = function() {
+            const teamNumber = document.getElementById('teamNumber').value;
+            const teamName = document.getElementById('teamName').value;
+            
+            if (teamNumber && teamName) {
+                // Add new team
+                teams.push({ number: teamNumber, name: teamName });
+                
+                // Refresh display
+                displayTeams(teams);
+                
+                // Clear and close modal
+                document.getElementById('teamNumber').value = '';
+                document.getElementById('teamName').value = '';
+                modal.style.display = 'none';
+            } else {
+                alert('Please fill in both fields');
+            }
+        }
+    </script>
 </body>
 </html>
