@@ -1,0 +1,3 @@
+# .gitignore
+.env           # Excludes the .env file
+node_modules/  # Excludes Node.js dependencies
