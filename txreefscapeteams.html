@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TX Reefscape Teams</title>
     <style>
+        /* Your existing CSS styles remain the same */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -143,39 +144,55 @@
     </div>
 
     <script>
-        // Key for localStorage
-        const STORAGE_KEY = 'txreefscapeteams_teams';
-
-        // Sample data - will be used only if no data exists in localStorage
-        const defaultTeams = [
-            { number: "101", name: "Ocean Guardians" },
-            { number: "205", name: "Reef Rangers" },
-            { number: "307", name: "Coral Defenders" },
-            { number: "412", name: "Marine Protectors" },
-            { number: "519", name: "Aqua Warriors" }
-        ];
-
-        // Load teams from localStorage or initialize with default teams
-        function loadTeams() {
-            const storedTeams = localStorage.getItem(STORAGE_KEY);
-            if (storedTeams) {
-                return JSON.parse(storedTeams);
-            } else {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultTeams));
-                return defaultTeams;
-            }
-        }
-
-        // Save teams to localStorage
-        function saveTeams(teams) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(teams));
-        }
-
+        // API base URL - update this to your server's address
+        const API_BASE_URL = 'http://localhost:3000/api';
+        
         // Display teams on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const teams = loadTeams();
-            displayTeams(teams);
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const teams = await fetchTeams();
+                displayTeams(teams);
+            } catch (error) {
+                console.error('Failed to load teams:', error);
+                alert('Failed to load teams. Please try again later.');
+            }
         });
+
+        // Fetch teams from server
+        async function fetchTeams() {
+            const response = await fetch(`${API_BASE_URL}/teams`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return await response.json();
+        }
+
+        // Search teams on server
+        async function searchTeamsOnServer(searchTerm) {
+            const response = await fetch(`${API_BASE_URL}/teams/search?term=${encodeURIComponent(searchTerm)}`);
+            if (!response.ok) {
+                throw new Error('Search failed');
+            }
+            return await response.json();
+        }
+
+        // Add new team to server
+        async function addTeamToServer(team) {
+            const response = await fetch(`${API_BASE_URL}/teams`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(team)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to add team');
+            }
+            
+            return await response.json();
+        }
 
         // Display teams in numerical order
         function displayTeams(teamsToDisplay) {
@@ -199,29 +216,22 @@
         }
 
         // Search functionality
-        document.getElementById('searchButton').addEventListener('click', searchTeams);
-        document.getElementById('searchBar').addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                searchTeams();
+        document.getElementById('searchButton').addEventListener('click', async function() {
+            try {
+                const searchTerm = document.getElementById('searchBar').value;
+                const teams = await searchTeamsOnServer(searchTerm);
+                displayTeams(teams);
+            } catch (error) {
+                console.error('Search error:', error);
+                alert(error.message);
             }
         });
 
-        function searchTeams() {
-            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
-            const teams = loadTeams();
-            
-            if (searchTerm === '') {
-                displayTeams(teams);
-                return;
+        document.getElementById('searchBar').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('searchButton').click();
             }
-            
-            const filteredTeams = teams.filter(team => 
-                team.number.toLowerCase().includes(searchTerm) || 
-                team.name.toLowerCase().includes(searchTerm)
-            );
-            
-            displayTeams(filteredTeams);
-        }
+        });
 
         // New Team Modal functionality
         const modal = document.getElementById('newTeamModal');
@@ -243,33 +253,25 @@
             }
         }
 
-        submitTeamBtn.onclick = function() {
+        submitTeamBtn.onclick = async function() {
             const teamNumber = document.getElementById('teamNumber').value.trim();
             const teamName = document.getElementById('teamName').value.trim();
             
             if (teamNumber && teamName) {
-                // Load current teams
-                const teams = loadTeams();
-                
-                // Check if team number already exists
-                if (teams.some(team => team.number === teamNumber)) {
-                    alert('A team with this number already exists!');
-                    return;
+                try {
+                    await addTeamToServer({ number: teamNumber, name: teamName });
+                    
+                    // Refresh the team list
+                    const teams = await fetchTeams();
+                    displayTeams(teams);
+                    
+                    // Clear and close modal
+                    document.getElementById('teamNumber').value = '';
+                    document.getElementById('teamName').value = '';
+                    modal.style.display = 'none';
+                } catch (error) {
+                    alert(error.message);
                 }
-                
-                // Add new team
-                teams.push({ number: teamNumber, name: teamName });
-                
-                // Save to localStorage
-                saveTeams(teams);
-                
-                // Refresh display
-                displayTeams(teams);
-                
-                // Clear and close modal
-                document.getElementById('teamNumber').value = '';
-                document.getElementById('teamName').value = '';
-                modal.style.display = 'none';
             } else {
                 alert('Please fill in both fields');
             }
