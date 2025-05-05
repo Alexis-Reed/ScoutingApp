@@ -30,9 +30,18 @@
     }
 
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-    }
+  padding: 15px 30px;
+  font-size: 18px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+
 
     #match-end {
       position: fixed;
@@ -106,8 +115,10 @@
     <button onclick="logAction('Processed')">Processed</button>
     <button onclick="logAction('Not Processed')">Not Processed</button>
     <button onclick="logAction('Later')">Later</button>
+    <button onclick="closeModal('algaeModal')">Cancel</button>
   </div>
 </div>
+
 
 <script>
   function logAction(action) {
