@@ -30,64 +30,63 @@
     }
 
     button {
-  padding: 15px 20px;
-  font-size: 20px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  width: 200px;  /* Fixed width for all buttons */
-  height: 60px;  /* Fixed height for all buttons */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+      padding: 15px 20px;
+      font-size: 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 200px;  /* Fixed width for all buttons */
+      height: 60px;  /* Fixed height for all buttons */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
-button:hover {
-  background-color: #0056b3;
-}
+    button:hover {
+      background-color: #0056b3;
+    }
 
-/* Smaller button styles */
-.small-button {
-  padding: 10px 20px;
-  font-size: 18px;
-  background-color: #FF6347;  /* Optionally, a different color */
-}
+    .small-button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #FF6347;
+    }
 
-#match-end {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: red;
-  color: white;
-  width: 200px;
-  height: 60px;
-}
+    #match-end {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: red;
+      color: white;
+      width: 200px;
+      height: 60px;
+    }
 
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-}
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-}
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
 
-.modal-content button {
-  margin: 5px;
-}
+    .modal-content button {
+      margin: 5px;
+    }
   </style>
 </head>
 <body>
@@ -111,7 +110,7 @@ button:hover {
 <!-- Undo Confirmation Modal -->
 <div id="undoModal" class="modal">
   <div class="modal-content">
-    <p>Are you sure you want to undo?</p>
+    <p id="undo-text">Are you sure you want to undo?</p>
     <button onclick="showUndoReasons()">Yes</button>
     <button onclick="closeModal('undoModal')">No</button>
   </div>
@@ -137,32 +136,48 @@ button:hover {
   </div>
 </div>
 
-
 <script>
+  // Store the last action
+  let lastAction = "";
+
+  // Function to log actions and store the last one
   function logAction(action) {
+    lastAction = action;  // Update the last action
     console.log("Action:", action);
     alert("Logged: " + action);
   }
 
+  // Show the undo modal with the last action
   function confirmUndo() {
-    document.getElementById('undoModal').style.display = 'flex';
+    if (lastAction === "") {
+      alert("No action to undo.");
+    } else {
+      document.getElementById('undo-text').textContent = `Are you sure you want to undo ${lastAction}?`;
+      document.getElementById('undoModal').style.display = 'flex';
+    }
   }
 
+  // Show the undo reason modal
   function showUndoReasons() {
     closeModal('undoModal');
     document.getElementById('undoReasonModal').style.display = 'flex';
   }
 
+  // Log the undo action with a reason and show confirmation
   function logUndo(reason) {
     console.log("Undo Reason:", reason);
-    alert("Undo Reason: " + reason);
+    alert(`Undid: ${lastAction} because: ${reason}`);
     closeModal('undoReasonModal');
+    alert(`Undid ${lastAction}`);
+    lastAction = "";  // Clear the last action after undo
   }
 
+  // Show the Algae Processor options
   function showAlgaeProcessor() {
     document.getElementById('algaeModal').style.display = 'flex';
   }
 
+  // Close any modal
   function closeModal(id) {
     document.getElementById(id).style.display = 'none';
   }
@@ -170,4 +185,3 @@ button:hover {
 
 </body>
 </html>
-
