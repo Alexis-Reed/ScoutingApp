@@ -41,6 +41,12 @@
 button:hover {
   background-color: #0056b3;
 }
+    /* Smaller button styles */
+.small-button {
+  padding: 20px 35px;
+  font-size: 18px;
+  background-color: #FF6347;  /* Optionally, a different color */
+}
 
 
     #match-end {
@@ -75,7 +81,7 @@ button:hover {
 <body>
 
 <div id="top-bar">
-  <button onclick="confirmUndo()">Undo</button>
+  <button class="small-button" onclick="confirmUndo()">Undo</button>
   <input type="text" id="match-input" placeholder="Enter Match Number" />
 </div>
 
@@ -88,7 +94,7 @@ button:hover {
   <button onclick="logAction('Algae Net')">Algae Net</button>
 </div>
 
-<button id="match-end" onclick="logAction('Match End')">Match End</button>
+<button id="match-end" class="small-button" onclick="logAction('Match End')">Match End</button>
 
 <!-- Undo Confirmation Modal -->
 <div id="undoModal" class="modal">
