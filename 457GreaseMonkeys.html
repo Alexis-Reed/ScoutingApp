@@ -30,52 +30,64 @@
     }
 
     button {
-  padding: 40px 55px;
-  font-size: 30px;
+  padding: 15px 20px;
+  font-size: 20px;
   background-color: #007BFF;
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  width: 200px;  /* Fixed width for all buttons */
+  height: 60px;  /* Fixed height for all buttons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
+
 button:hover {
   background-color: #0056b3;
 }
-    /* Smaller button styles */
+
+/* Smaller button styles */
 .small-button {
-  padding: 20px 35px;
+  padding: 10px 20px;
   font-size: 18px;
   background-color: #FF6347;  /* Optionally, a different color */
 }
 
+#match-end {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: red;
+  color: white;
+  width: 200px;
+  height: 60px;
+}
 
-    #match-end {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: red;
-      color: white;
-    }
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-    }
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
 
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    .modal-content button {
-      margin: 5px;
-    }
+.modal-content button {
+  margin: 5px;
+}
   </style>
 </head>
 <body>
