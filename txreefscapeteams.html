@@ -1,281 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TX Reefscape Teams</title>
-    <style>
-        /* Your existing CSS styles remain the same */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .search-container {
-            display: flex;
-            width: 60%;
-        }
-        #searchBar {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
-        }
-        #searchButton {
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-        }
-        #newTeamBtn {
-            padding: 10px 15px;
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 20px;
-        }
-        .team-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .team-btn {
-            padding: 10px 15px;
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            min-width: 120px;
-        }
-        .team-btn:hover {
-            background-color: #e68a00;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-            border-radius: 5px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        #submitTeam {
-            padding: 10px 15px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <button id="newTeamBtn">New Team</button>
-        <div class="search-container">
-            <input type="text" id="searchBar" placeholder="Search teams...">
-            <button id="searchButton">Search</button>
-        </div>
-    </div>
+<script>
+    // Sample team data
+    const sampleTeams = [
+        { number: '1234', name: 'Reef Explorers' },
+        { number: '5678', name: 'Coral Crusaders' },
+        { number: '9012', name: 'Ocean Builders' }
+    ];
 
-    <div class="team-buttons" id="teamButtons">
-        <!-- Team buttons will be generated here -->
-    </div>
+    // On page load, show teams
+    document.addEventListener('DOMContentLoaded', () => {
+        displayTeams(sampleTeams);
+    });
 
-    <!-- New Team Modal -->
-    <div id="newTeamModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add New Team</h2>
-            <div class="form-group">
-                <label for="teamNumber">Team Number:</label>
-                <input type="text" id="teamNumber" required>
-            </div>
-            <div class="form-group">
-                <label for="teamName">Team Name:</label>
-                <input type="text" id="teamName" required>
-            </div>
-            <button id="submitTeam">Add Team</button>
-        </div>
-    </div>
+    // Display teams in numerical order
+    function displayTeams(teamsToDisplay) {
+        const container = document.getElementById('teamButtons');
+        container.innerHTML = '';
 
-    <script>
-        // API base URL - update this to your server's address
-        const API_BASE_URL = 'http://localhost:3000/api';
-        
-        // Display teams on page load
-        document.addEventListener('DOMContentLoaded', async function() {
-            try {
-                const teams = await fetchTeams();
-                displayTeams(teams);
-            } catch (error) {
-                console.error('Failed to load teams:', error);
-                alert('Failed to load teams. Please try again later.');
-            }
+        const sortedTeams = [...teamsToDisplay].sort((a, b) => parseInt(a.number) - parseInt(b.number));
+
+        sortedTeams.forEach(team => {
+            const btn = document.createElement('button');
+            btn.className = 'team-btn';
+            btn.textContent = `${team.number} ${team.name}`;
+            btn.onclick = () => {
+                const teamPage = `${team.number}${team.name.replace(/\s+/g, '')}.html`;
+                window.location.href = teamPage;
+            };
+            container.appendChild(btn);
         });
+    }
 
-        // Fetch teams from server
-        async function fetchTeams() {
-            const response = await fetch(`${API_BASE_URL}/teams`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return await response.json();
+    // Search functionality
+    document.getElementById('searchButton').addEventListener('click', () => {
+        const term = document.getElementById('searchBar').value.toLowerCase();
+        const filtered = sampleTeams.filter(team =>
+            team.number.includes(term) || team.name.toLowerCase().includes(term)
+        );
+        displayTeams(filtered);
+    });
+
+    document.getElementById('searchBar').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('searchButton').click();
         }
+    });
 
-        // Search teams on server
-        async function searchTeamsOnServer(searchTerm) {
-            const response = await fetch(`${API_BASE_URL}/teams/search?term=${encodeURIComponent(searchTerm)}`);
-            if (!response.ok) {
-                throw new Error('Search failed');
-            }
-            return await response.json();
-        }
+    // New Team Modal logic
+    const modal = document.getElementById('newTeamModal');
+    const newTeamBtn = document.getElementById('newTeamBtn');
+    const closeBtn = document.getElementsByClassName('close')[0];
+    const submitTeamBtn = document.getElementById('submitTeam');
 
-        // Add new team to server
-        async function addTeamToServer(team) {
-            const response = await fetch(`${API_BASE_URL}/teams`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(team)
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to add team');
-            }
-            
-            return await response.json();
-        }
+    newTeamBtn.onclick = () => modal.style.display = 'block';
+    closeBtn.onclick = () => modal.style.display = 'none';
+    window.onclick = event => { if (event.target == modal) modal.style.display = 'none'; }
 
-        // Display teams in numerical order
-        function displayTeams(teamsToDisplay) {
-            const container = document.getElementById('teamButtons');
-            container.innerHTML = '';
-            
-            // Sort teams by number
-            const sortedTeams = [...teamsToDisplay].sort((a, b) => parseInt(a.number) - parseInt(b.number));
-            
-            sortedTeams.forEach(team => {
-                const btn = document.createElement('button');
-                btn.className = 'team-btn';
-                btn.textContent = `${team.number} ${team.name}`;
-                btn.onclick = function() {
-                    // Create and navigate to team page
-                    const teamPage = `${team.number}${team.name.replace(/\s+/g, '')}.html`;
-                    window.location.href = teamPage;
-                };
-                container.appendChild(btn);
-            });
-        }
+    submitTeamBtn.onclick = () => {
+        const teamNumber = document.getElementById('teamNumber').value.trim();
+        const teamName = document.getElementById('teamName').value.trim();
 
-        // Search functionality
-        document.getElementById('searchButton').addEventListener('click', async function() {
-            try {
-                const searchTerm = document.getElementById('searchBar').value;
-                const teams = await searchTeamsOnServer(searchTerm);
-                displayTeams(teams);
-            } catch (error) {
-                console.error('Search error:', error);
-                alert(error.message);
-            }
-        });
-
-        document.getElementById('searchBar').addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('searchButton').click();
-            }
-        });
-
-        // New Team Modal functionality
-        const modal = document.getElementById('newTeamModal');
-        const newTeamBtn = document.getElementById('newTeamBtn');
-        const closeBtn = document.getElementsByClassName('close')[0];
-        const submitTeamBtn = document.getElementById('submitTeam');
-
-        newTeamBtn.onclick = function() {
-            modal.style.display = 'block';
-        }
-
-        closeBtn.onclick = function() {
+        if (teamNumber && teamName) {
+            sampleTeams.push({ number: teamNumber, name: teamName });
+            displayTeams(sampleTeams);
+            document.getElementById('teamNumber').value = '';
+            document.getElementById('teamName').value = '';
             modal.style.display = 'none';
+        } else {
+            alert('Please fill in both fields');
         }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        submitTeamBtn.onclick = async function() {
-            const teamNumber = document.getElementById('teamNumber').value.trim();
-            const teamName = document.getElementById('teamName').value.trim();
-            
-            if (teamNumber && teamName) {
-                try {
-                    await addTeamToServer({ number: teamNumber, name: teamName });
-                    
-                    // Refresh the team list
-                    const teams = await fetchTeams();
-                    displayTeams(teams);
-                    
-                    // Clear and close modal
-                    document.getElementById('teamNumber').value = '';
-                    document.getElementById('teamName').value = '';
-                    modal.style.display = 'none';
-                } catch (error) {
-                    alert(error.message);
-                }
-            } else {
-                alert('Please fill in both fields');
-            }
-        }
-    </script>
-</body>
-</html>
+    };
+</script>
