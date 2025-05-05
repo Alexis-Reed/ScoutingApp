@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Match Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #match-input {
+      flex-grow: 1;
+      margin-left: 10px;
+    }
+
+    #buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    #match-end {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: red;
+      color: white;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .modal-content button {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="top-bar">
+  <button onclick="confirmUndo()">Undo</button>
+  <input type="text" id="match-input" placeholder="Enter Match Number" />
+</div>
+
+<div id="buttons">
+  <button onclick="logAction('L4')">L4</button>
+  <button onclick="logAction('L3')">L3</button>
+  <button onclick="logAction('L2')">L2</button>
+  <button onclick="logAction('L1')">L1</button>
+  <button onclick="showAlgaeProcessor()">Algae Processor</button>
+  <button onclick="logAction('Algae Net')">Algae Net</button>
+</div>
+
+<button id="match-end" onclick="logAction('Match End')">Match End</button>
+
+<!-- Undo Confirmation Modal -->
+<div id="undoModal" class="modal">
+  <div class="modal-content">
+    <p>Are you sure you want to undo?</p>
+    <button onclick="showUndoReasons()">Yes</button>
+    <button onclick="closeModal('undoModal')">No</button>
+  </div>
+</div>
+
+<!-- Undo Reason Modal -->
+<div id="undoReasonModal" class="modal">
+  <div class="modal-content">
+    <p>Why do you want to undo?</p>
+    <button onclick="logUndo('Mistake')">Mistake</button>
+    <button onclick="logUndo('Fell Out')">Fell Out</button>
+  </div>
+</div>
+
+<!-- Algae Processor Modal -->
+<div id="algaeModal" class="modal">
+  <div class="modal-content">
+    <p>Algae Processor Options:</p>
+    <button onclick="logAction('Processed')">Processed</button>
+    <button onclick="logAction('Not Processed')">Not Processed</button>
+    <button onclick="logAction('Later')">Later</button>
+  </div>
+</div>
+
+<script>
+  function logAction(action) {
+    console.log("Action:", action);
+    alert("Logged: " + action);
+  }
+
+  function confirmUndo() {
+    document.getElementById('undoModal').style.display = 'flex';
+  }
+
+  function showUndoReasons() {
+    closeModal('undoModal');
+    document.getElementById('undoReasonModal').style.display = 'flex';
+  }
+
+  function logUndo(reason) {
+    console.log("Undo Reason:", reason);
+    alert("Undo Reason: " + reason);
+    closeModal('undoReasonModal');
+  }
+
+  function showAlgaeProcessor() {
+    document.getElementById('algaeModal').style.display = 'flex';
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
 
