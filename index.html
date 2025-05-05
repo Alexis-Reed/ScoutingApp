@@ -27,6 +27,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      <p id="monkey-fact" style="max-width: 400px; font-style: italic; margin-top: 20px;"></p>
+
     }
 
     .button {
@@ -103,6 +105,21 @@
     window.addEventListener('beforeunload', () => {
       sessionStorage.clear();
     });
+
+    const monkeyFacts = [
+  "Monkeys can understand basic arithmetic and even multiplication!",
+  "Capuchin monkeys use tools like rocks to crack nuts.",
+  "Some monkeys have fingerprints just like humans!",
+  "A group of monkeys is called a 'troop'.",
+  "Monkeys can learn to use currency in experiments!",
+  "Howler monkeys are the loudest land animals.",
+  "Spider monkeys can swing from trees using only their tails."
+];
+
+const factElement = document.getElementById('monkey-fact');
+const randomFact = monkeyFacts[Math.floor(Math.random() * monkeyFacts.length)];
+factElement.textContent = `🧠 Fun Monkey Fact: ${randomFact}`;
+
   </script>
 </body>
 </html>
